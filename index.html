@@ -495,10 +495,34 @@
     </div>
     <input type="text" id="marca-drive" placeholder="Link de Google Drive (opcional)">
     <div class="chips" style="margin-top:8px;">
-      <div class="chip" onclick="togChip(this)">✓ Tengo logo</div>
-      <div class="chip" onclick="togChip(this)">✓ Tengo manual</div>
-      <div class="chip" onclick="togChip(this)">✓ Tengo referencias</div>
+      <div class="chip" onclick="togChip(this)">✓ Tengo manual de marca</div>
+      <div class="chip" onclick="togChip(this)">✓ Tengo referencias visuales</div>
       <div class="chip" onclick="togChip(this)">No tengo nada aún</div>
+    </div>
+
+    <div style="margin-top:14px; border-top:1px solid var(--border); padding-top:14px;">
+      <label class="field-label" style="margin-bottom:8px;">
+        Logo en archivo vectorial <span class="req">Obligatorio para incluir logo en la pieza</span>
+      </label>
+      <p style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px;">El logo <strong>debe estar en formato AI, EPS o SVG</strong> para quedar bien en la pieza final. Un logo extraído de PDF, JPG o captura de pantalla sale pixelado y no sirve para producción.</p>
+      <div class="grid3" id="logo-vec-grid">
+        <div class="card-opt" onclick="selLogoVec(this,'si-wa')">
+          <div class="opt-title">✅ Sí — WhatsApp</div>
+          <div class="opt-sub">Lo mando al +591 76373767</div>
+        </div>
+        <div class="card-opt" onclick="selLogoVec(this,'si-drive')">
+          <div class="opt-title">✅ Sí — Drive</div>
+          <div class="opt-sub">Está en el link compartido</div>
+        </div>
+        <div class="card-opt" onclick="selLogoVec(this,'no')">
+          <div class="opt-title">❌ No tengo</div>
+          <div class="opt-sub">Solo tengo JPG o PDF</div>
+        </div>
+      </div>
+      <div id="logo-vec-alerta" style="display:none; margin-top:10px;" class="alert amber">
+        <span class="alert-icon">⚠️</span>
+        <span>Sin el logo en formato vectorial (AI · EPS · SVG) no podemos incluirlo en la pieza final con calidad correcta. Podés solicitarlo a tu diseñador o agencia. <strong>Reconstrucción de logo desde cero: 150 Bs adicionales.</strong></span>
+      </div>
     </div>
   </div>
 </div>
@@ -584,8 +608,8 @@
   </div>
 
   <div class="field">
-    <label class="field-label">¿El logo va en la pieza final?</label>
-    <div class="grid3">
+    <label class="field-label">¿El logo va en la pieza final? <span>Solo si tenés el archivo vectorial</span></label>
+    <div class="grid3" id="logo-pos-grid">
       <div class="card-opt" onclick="selUno(this,'logo-pos')">
         <div class="opt-title">Sí, arriba</div>
         <div class="opt-sub">Esquina superior</div>
@@ -598,6 +622,10 @@
         <div class="opt-title">Sin logo</div>
         <div class="opt-sub">No incluir</div>
       </div>
+    </div>
+    <div style="margin-top:8px;" class="alert blue">
+      <span class="alert-icon">ℹ️</span>
+      <span style="font-size:12px;">El logo se monta en post-producción sobre la imagen generada. Para eso necesitamos el archivo vectorial que indicaste arriba. Sin ese archivo, la pieza se entrega sin logo.</span>
     </div>
   </div>
 </div>
@@ -811,6 +839,14 @@ function selEnt(el,e){
 
 function setCTA(t){ document.getElementById('txt-cta').value=t; }
 
+let logoVecSel=null;
+function selLogoVec(el,val){
+  logoVecSel=val;
+  document.querySelectorAll('#logo-vec-grid .card-opt').forEach(b=>b.classList.remove('on','popular'));
+  el.classList.add('on','popular');
+  document.getElementById('logo-vec-alerta').style.display=val==='no'?'flex':'none';
+}
+
 function calcular(){
   const cant=parseInt(document.getElementById('cantidad').value);
   document.getElementById('cant-out').textContent=cant;
@@ -891,6 +927,7 @@ Tagline: ${tag}
 ${obj}
 ━━━━━━━━━━━━━━━━━━━━
 📁 Archivos Drive: ${drive}
+🎨 Logo vectorial: ${logoVecSel==='si-wa'?'Sí · envío por WhatsApp':logoVecSel==='si-drive'?'Sí · está en el Drive':'NO TIENE · solo JPG/PDF'}
 ━━━━━━━━━━━━━━━━━━━━
 ✅ Confirmé confidencialidad, textos, revisiones y condiciones de pago.`;
 
