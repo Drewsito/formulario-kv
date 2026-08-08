@@ -550,6 +550,38 @@
   </div>
 
   <div class="field">
+    <label class="field-label">Imagen de referencia visual <span>Muy recomendado</span></label>
+    <div class="alert blue" style="margin-bottom:12px;">
+      <span class="alert-icon">🎯</span>
+      <span>Si viste alguna pieza publicitaria, campaña, foto o diseño que se parezca a lo que buscás, compartila. <strong>No la vamos a copiar</strong> — la usamos para entender el estilo, la composición y la atmósfera que te gusta. Cuanto más clara sea tu referencia, mejor va a ser el primer resultado.</span>
+    </div>
+    <div class="grid3" style="margin-bottom:10px;">
+      <div class="card-opt on popular" onclick="selRef(this,'link')">
+        <div class="opt-title">🔗 Link</div>
+        <div class="opt-sub">Pinterest, Instagram, web</div>
+      </div>
+      <div class="card-opt" onclick="selRef(this,'wa')">
+        <div class="opt-title">📱 WhatsApp</div>
+        <div class="opt-sub">Mando la imagen por WA</div>
+      </div>
+      <div class="card-opt" onclick="selRef(this,'descripcion')">
+        <div class="opt-title">✏️ Solo descripción</div>
+        <div class="opt-sub">No tengo imagen</div>
+      </div>
+    </div>
+    <div id="ref-link-field">
+      <input type="text" id="ref-link" placeholder="Pegá el link de la referencia (Pinterest, Instagram, web, Drive...)">
+    </div>
+    <div id="ref-wa-msg" style="display:none;" class="alert amber">
+      <span class="alert-icon">📱</span>
+      <span>Perfecto — enviá la imagen de referencia al <a href="https://wa.me/59157392627" style="color:var(--amber-text);font-weight:600;">+591 57392627</a> junto con tu nombre para que podamos asociarla a tu pedido.</span>
+    </div>
+    <div id="ref-desc-field" style="display:none; margin-top:8px;">
+      <textarea id="ref-descripcion" placeholder="Describí el estilo que buscás. Ej: Algo moderno, fondo oscuro, persona joven con celular, colores vibrantes, estilo similar a publicidad de Netflix..." style="min-height:64px;"></textarea>
+    </div>
+  </div>
+
+  <div class="field">
     <label class="field-label">¿A quién le hablás?</label>
     <div class="chips">
       <div class="chip" onclick="togChip(this)">Jóvenes 18–28</div>
@@ -840,6 +872,16 @@ function selEnt(el,e){
 function setCTA(t){ document.getElementById('txt-cta').value=t; }
 
 let logoVecSel=null;
+
+let refSel='link';
+function selRef(el,val){
+  refSel=val;
+  document.querySelectorAll('.card-opt[onclick*="selRef"]').forEach(b=>b.classList.remove('on','popular'));
+  el.classList.add('on','popular');
+  document.getElementById('ref-link-field').style.display=val==='link'?'block':'none';
+  document.getElementById('ref-wa-msg').style.display=val==='wa'?'flex':'none';
+  document.getElementById('ref-desc-field').style.display=val==='descripcion'?'block':'none';
+}
 function selLogoVec(el,val){
   logoVecSel=val;
   document.querySelectorAll('#logo-vec-grid .card-opt').forEach(b=>b.classList.remove('on','popular'));
@@ -928,6 +970,7 @@ ${obj}
 ━━━━━━━━━━━━━━━━━━━━
 📁 Archivos Drive: ${drive}
 🎨 Logo vectorial: ${logoVecSel==='si-wa'?'Sí · envío por WhatsApp':logoVecSel==='si-drive'?'Sí · está en el Drive':'NO TIENE · solo JPG/PDF'}
+🖼 Referencia visual: ${refSel==='link'?(document.getElementById('ref-link').value.trim()||'Link no ingresado'):refSel==='wa'?'Envía imagen por WhatsApp':'Descripción: '+(document.getElementById('ref-descripcion').value.trim()||'—')}
 ━━━━━━━━━━━━━━━━━━━━
 ✅ Confirmé confidencialidad, textos, revisiones y condiciones de pago.`;
 
